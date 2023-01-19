@@ -21,7 +21,13 @@ public class    RestController {
         Integer timeA = json.get("TimeA");
         Integer timeB = json.get("TimeB");
         PlacarDao placarDao = new PlacarDao(timeA, timeB);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         placarService.createPlacar(placarDao);
+
         return new ResponseEntity<>(placarDao, HttpStatus.OK);
     }
 
