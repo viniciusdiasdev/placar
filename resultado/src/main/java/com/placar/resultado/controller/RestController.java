@@ -21,15 +21,22 @@ public class    RestController {
         Integer timeA = json.get("TimeA");
         Integer timeB = json.get("TimeB");
         PlacarDao placarDao = new PlacarDao(timeA, timeB);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         placarService.createPlacar(placarDao);
 
         return new ResponseEntity<>(placarDao, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public void updatePlacar(@RequestBody Map<String, Object> placar, @PathVariable Integer id){
+        placarService.updatePlacar(placar, id);
+    }
+
+    @GetMapping("/{id}")
+    public Placar getPlacar(@PathVariable Integer id){
+        Placar placar = placarService.getPlacarById(id);
+        return placar;
+    }
+
 
     @PostMapping("/notfound")
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -49,12 +56,6 @@ public class    RestController {
     @PostMapping("/internal")
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public void internalError(@RequestBody Map<String, Integer> json){
-    }
-
-    @GetMapping("/{id}")
-    public Placar getPlacar(@PathVariable Integer id){
-        Placar placar = placarService.getPlacarById(id);
-        return placar;
     }
 
     @GetMapping
